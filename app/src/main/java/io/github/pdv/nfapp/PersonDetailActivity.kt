@@ -62,12 +62,18 @@ fun ViewManager.personDetailView(
 
 class PersonDetailActivity : AppCompatActivity() {
 
+    companion object {
+        const val KEY_PERSON = "KEY_PERSON"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val person = intent.extras?.getParcelable(KEY_PERSON)
+            ?: Person("Bob Costas", 48, Date())
         frameLayout {
-            personDetailView("Bob Costas", 48, Date())
+            personDetailView(person.name, person.score, person.date)
             toolbar {
-                withBackArrow(R.color.white) {}
+                withBackArrow(R.color.white, ::finish)
             }
         }
     }
