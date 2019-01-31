@@ -15,7 +15,8 @@ val names = listOf("John", "Paul", "George", "Ringo")
 fun randomPerson() = Person(
     name = names.random(),
     score = Random.nextInt(100),
-    date = Date(Random.nextLong(Date().time))
+    date = Date(Random.nextLong(Date().time)),
+    gender = if (Random.nextBoolean()) Gender.Male else Gender.Female
 )
 
 class RandomPersonActivity : AppCompatActivity() {

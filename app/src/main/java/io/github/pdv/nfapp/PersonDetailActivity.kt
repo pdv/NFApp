@@ -69,7 +69,7 @@ class PersonDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val person = intent.extras?.getParcelable(KEY_PERSON)
-            ?: Person("Bob Costas", 48, Date())
+            ?: Person("Bob Costas", 48, Date(), Gender.Male)
         frameLayout {
             personDetailView(person.name, person.score, person.date)
             toolbar {

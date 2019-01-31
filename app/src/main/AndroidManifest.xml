@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".RandomPersonActivity">
+        <activity android:name=".PersonListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -17,6 +17,7 @@
         </activity>
 
         <activity android:name=".PersonDetailActivity" />
+        <activity android:name=".RandomPersonActivity" />
 
     </application>
 </manifest>
