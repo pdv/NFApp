@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NFApp</string>
+    <string name="random_person">Random Person</string>
 </resources>
