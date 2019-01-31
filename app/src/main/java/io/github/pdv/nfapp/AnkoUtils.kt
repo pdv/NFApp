@@ -1,11 +1,16 @@
 package io.github.pdv.nfapp
 
 import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.view.ViewManager
 import android.widget.ImageView
 import org.jetbrains.anko.custom.ankoView
@@ -31,3 +36,13 @@ fun Toolbar.withBackArrow(@ColorRes colorRes: Int, listener: () -> Unit = {}) =
 var ImageView.tintColorResource: Int
     get() = throw UnsupportedOperationException()
     set(value) = setColorFilter(ContextCompat.getColor(context, value), PorterDuff.Mode.SRC_ATOP)
+
+var View.rippleOnClick: Boolean
+    get() = throw UnsupportedOperationException()
+    set(value) {
+        val attrs = intArrayOf(R.attr.selectableItemBackground)
+        val typedArray = context.obtainStyledAttributes(attrs)
+        val selectableBackground = typedArray.getDrawable(0)
+        typedArray.recycle()
+        foreground = if (value) selectableBackground else null
+    }
