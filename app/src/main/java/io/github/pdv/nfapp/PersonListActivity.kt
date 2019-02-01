@@ -3,12 +3,12 @@ package io.github.pdv.nfapp
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import org.jetbrains.anko.backgroundColorResource
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.matchParent
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.verticalLayout
-import java.util.*
 
 fun rowify(persons: List<Person>) = persons
     .sortedBy { it.date }
@@ -28,14 +28,7 @@ fun rowify(persons: List<Person>) = persons
 
 class PersonListActivity : AppCompatActivity() {
 
-    private val persons = listOf(
-        Person("Ryan", 63, Date(1546341851000), Gender.Male),
-        Person("Melissa", 91, Date(1540341851000), Gender.Female),
-        Person("Jess", 93, Date(1540341751000), Gender.Female),
-        Person("Sam", 86, Date(1536442851000), Gender.Male),
-        Person("Carly", 89, Date(1540341651000), Gender.Female),
-        Person("Joey", 78, Date(1546442992000), Gender.Male)
-    )
+    private val disposable = CompositeDisposable()
 
     private val personAdapter = SectionedAdapter(::HeaderCell, ::PersonCell) { person ->
         startActivity(intentFor<PersonDetailActivity>(PersonDetailActivity.KEY_PERSON to person))
@@ -54,7 +47,19 @@ class PersonListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        personAdapter.rows = rowify(persons)
+        persons()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { persons -> personAdapter.rows = rowify(persons) },
+                { error -> toast(error.localizedMessage) }
+            )
+            .addTo(disposable)
+    }
+
+    override fun onPause() {
+        disposable.clear()
+        super.onPause()
     }
 
 }
